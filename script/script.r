@@ -1,3 +1,5 @@
+options(tz="Europe/Berlin")
+
 library(httr)
 library(jsonlite)
 library(rjson)
@@ -5,7 +7,8 @@ library(rsvg)
 library(twitteR)
 library(ggplot2)
 
-text <- Sys.time()
+
+text <- as.character(Sys.time())
 
 credentials_file = "credentials.json"
 credentials <- jsonlite::fromJSON(credentials_file)
