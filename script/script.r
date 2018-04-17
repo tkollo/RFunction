@@ -5,46 +5,60 @@ library('httr')
 library('jsonlite')
 library('ggplot2')
 
-# Getting the weather data ------------------------------------------------------------------
+library(viridis)
+library(geojsonio)
+library(broom)
+library(dplyr)
 
-credentials_file = "credentials.json"
-credentials <- fromJSON(credentials_file)
-key <- credentials$openweathermap$key
-city <- "London"
-country <- "GB"
 
-url_api <- paste0("http://api.openweathermap.org/data/2.5/forecast?q=", city, ",", country,"&APPID=", key)
 
-res <- content(GET(url_api))
+data=read.table("https://www.r-graph-gallery.com/wp-content/uploads/2017/12/data_on_french_states.csv", header=T, sep=";")
+data %>% ggplot( aes(x=nb_equip)) + geom_histogram(bins=20, fill='skyblue', color='white') + scale_x_log10()
 
-dat <- data.frame(
-  dt=sapply(res$list, `[[`, "dt_txt", USE.NAMES = FALSE),
-  temp=sapply(sapply(res$list, `[`, "main"), `[[`, "temp", USE.NAMES = FALSE),
-  stringsAsFactors = FALSE
-)
 
-dat$dt <- as.POSIXct(dat$dt, format='%Y-%m-%d %H:%M:%S', origin='GMT')
-dat$temp <- round(dat$temp - 273.15, 1)
 
-# Min and max temperature for annotating the plot
-min_dat <- dat[which.min(dat$temp),]
-max_dat <- dat[which.max(dat$temp),]
 
-# Making the plot ------------------------------------------------------------------
+spdf <- geojson_read("https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/communes.geojson",  what = "sp")
 
-p<-ggplot(dat, aes(x=dt, y=temp, colour=temp)) +
-  geom_line() +
-  geom_point(size=2) +
-  geom_text(data=min_dat, aes(label=temp), nudge_y = -1, colour="black") +
-  geom_text(data=max_dat, aes(label=temp), nudge_y = +1, colour="black") +
-  scale_x_datetime(date_labels = "%a\n%b %d") +
-  theme_bw(base_size = 16) +
-  xlab(NULL) +
-  scale_y_continuous(breaks = seq(0,100,5)) +
-  ylab("Temperature (Celcius)") +
-  ggtitle(paste0("Temperature forecast in ", city, ", ", country), subtitle=strftime(Sys.Date(), "%A, %B %d"))+ 
-  geom_smooth(method = "loess", span=0.25, colour=NA, fill="grey80" ) +
-  scale_color_continuous(low="blue", high="red", limits=c(-10, 50), guide=FALSE)
+# Since it is a bit to much data, I select only a subset of it:
+spdf = spdf[ substr(spdf@data$code,1,2)  %in% c("06", "83", "13", "30", "34", "11", "66") , ]
+
+# I need to fortify the data AND keep trace of the commune code! (Takes 2 minutes)
+
+spdf_fortified <- tidy(spdf, region = "code")
+
+
+spdf_fortified = spdf_fortified %>%
+  left_join(. , data, by=c("id"="depcom")) 
+
+spdf_fortified$nb_equip[ is.na(spdf_fortified$nb_equip)] = 0.001
+
+
+
+
+p <- ggplot() +
+  geom_polygon(data = spdf_fortified, aes(fill = nb_equip, x = long, y = lat, group = group) , size=0, alpha=0.9) +
+  theme_void() +
+  scale_fill_viridis(trans = "log", breaks=c(1,25,50,100,200), name="Number of restaurant", guide = guide_legend( keyheight = unit(3, units = "mm"), keywidth=unit(12, units = "mm"), label.position = "bottom", title.position = 'top', nrow=1) ) +
+  labs(
+    title = "South of France Restaurant concentration",
+    subtitle = "Number of restaurant per city district", 
+    caption = "Data: INSEE | Creation: Yan Holtz | r-graph-gallery.com"
+  ) +
+  theme(
+    text = element_text(color = "#22211d"), 
+    plot.background = element_rect(fill = "#f5f5f2", color = NA), 
+    panel.background = element_rect(fill = "#f5f5f2", color = NA), 
+    legend.background = element_rect(fill = "#f5f5f2", color = NA),
+    
+    plot.title = element_text(size= 18, hjust=0.01, color = "#4e4d47", margin = margin(b = -0.1, t = 0.4, l = 2, unit = "cm")),
+    plot.subtitle = element_text(size= 12, hjust=0.01, color = "#4e4d47", margin = margin(b = -0.1, t = 0.43, l = 2, unit = "cm")),
+    plot.caption = element_text( size=7, color = "#4e4d47", margin = margin(b = 0.3, r=-99, unit = "cm") ),
+    
+    legend.position = c(0.7, 0.09)
+  ) +
+  coord_map()
+
 
 # Export to file ------------------------------------------------------------------
 
@@ -70,9 +84,9 @@ setup_twitter_oauth(ckey, csecret, atoken, asecret)
 if (Sys.getenv('WEBSITE_COMPUTE_MODE') == 'Dynamic') {
   # The graphics libraries on the consumption mode are not available
   # so you cannot generate a graph
-  tweet(paste("The temperature in", city, "is", dat$temp[1], "degrees Celcius.", "Use R on Azure Function https://github.com/thdeltei/azure-function-r"))  
+  tweet(paste("Restaurants in southern France."))  
 } else {
-  tweet(paste("The temperature in", city, "is", dat$temp[1], "degrees Celcius.", "Use R on Azure Function https://github.com/thdeltei/azure-function-r"), mediaPath = plot_file_png)
+  tweet(paste("Restaurants in southern France."), mediaPath = plot_file_png)
 }
 
 #  ------------------------------------------------------------------------

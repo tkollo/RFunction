@@ -4,3 +4,7 @@ if (!require('rsvg')) install.packages('rsvg', dependencies=TRUE, repos='http://
 if (!require('twitteR')) install.packages('twitteR', dependencies=TRUE, repos='http://cran.rstudio.com/')
 if (!require('jsonlite')) install.packages('jsonlite', dependencies=TRUE, repos='http://cran.rstudio.com/')
 if (!require('ggplot2')) install.packages('ggplot2', dependencies=TRUE, repos='http://cran.rstudio.com/')
+if (!require('dplyr')) install.packages('dplyr', dependencies=TRUE, repos='http://cran.rstudio.com/')
+if (!require('broom')) install.packages('broom', dependencies=TRUE, repos='http://cran.rstudio.com/')
+if (!require('geojsonio')) install.packages('geojsonio', dependencies=TRUE, repos='http://cran.rstudio.com/')
+if (!require('viridis')) install.packages('viridis', dependencies=TRUE, repos='http://cran.rstudio.com/')
