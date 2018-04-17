@@ -1,16 +1,19 @@
-library('rjson')
-library('rsvg')
-library('twitteR')
-library('httr')
-library('jsonlite')
-library('ggplot2')
-
+library(httr)
+library(jsonlite)
+library(rjson)
+library(rsvg)
+library(twitteR)
+library(ggplot2)
 library(viridis)
 library(geojsonio)
 library(broom)
 library(dplyr)
+library(maproj)
 
 
+credentials_file = "credentials.json"
+credentials <- fromJSON(credentials_file)
+key <- credentials$openweathermap$key
 
 data=read.table("https://www.r-graph-gallery.com/wp-content/uploads/2017/12/data_on_french_states.csv", header=T, sep=";")
 data %>% ggplot( aes(x=nb_equip)) + geom_histogram(bins=20, fill='skyblue', color='white') + scale_x_log10()
