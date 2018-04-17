@@ -1,1 +1,1 @@
-install.packages('package_name', dependencies=TRUE, repos='http://cran.rstudio.com/')
+install.packages('httr', dependencies=TRUE, repos='http://cran.rstudio.com/')
