@@ -5,7 +5,7 @@ library(rsvg)
 library(twitteR)
 library(ggplot2)
 
-p <- plot(iris)
+text <- Sys.time()
 
 credentials_file = "credentials.json"
 credentials <- jsonlite::fromJSON(credentials_file)
@@ -16,4 +16,4 @@ asecret <- credentials$twitter$access_secret
 
 setup_twitter_oauth(ckey, csecret, atoken, asecret)
 
-tweet(paste("Simplify")) 
+tweet(text) 
