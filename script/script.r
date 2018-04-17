@@ -11,8 +11,8 @@ library(dplyr)
 
 
 
-credentials_file = "credentials.json"
-credentials <- fromJSON(credentials_file)
+credentials <- fromJSON("credentials.json")
+
 key <- credentials$openweathermap$key
 
 data=read.table("https://www.r-graph-gallery.com/wp-content/uploads/2017/12/data_on_french_states.csv", header=T, sep=";")
