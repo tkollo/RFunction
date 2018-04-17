@@ -1,3 +1,5 @@
+options(tz="Europe/Berlin")
+
 if (!require('httr')) install.packages('httr', dependencies=TRUE, repos='http://cran.rstudio.com/')
 if (!require('rjson')) install.packages('rjson', dependencies=TRUE, repos='http://cran.rstudio.com/')
 if (!require('rsvg')) install.packages('rsvg', dependencies=TRUE, repos='http://cran.rstudio.com/')
@@ -8,3 +10,5 @@ if (!require('dplyr')) install.packages('dplyr', dependencies=TRUE, repos='http:
 if (!require('broom')) install.packages('broom', dependencies=TRUE, repos='http://cran.rstudio.com/')
 if (!require('geojsonio')) install.packages('geojsonio', dependencies=TRUE, repos='http://cran.rstudio.com/')
 if (!require('viridis')) install.packages('viridis', dependencies=TRUE, repos='http://cran.rstudio.com/')
+if (!require('mapproj')) install.packages('mapproj', dependencies=TRUE, repos='http://cran.rstudio.com/')
+
