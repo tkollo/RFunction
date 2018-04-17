@@ -8,7 +8,7 @@ library('ggplot2')
 # Getting the weather data ------------------------------------------------------------------
 
 credentials_file = "credentials.json"
-credentials <- fromJSON(file=credentials_file)
+credentials <- fromJSON(credentials_file)
 key <- credentials$openweathermap$key
 city <- "London"
 country <- "GB"
