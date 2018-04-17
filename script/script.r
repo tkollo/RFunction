@@ -60,7 +60,7 @@ rsvg_png(plot_file, plot_file_png)
 
 # Posting to twitter ------------------------------------------------------------------
 
-credentials <- fromJSON(file=credentials_file)
+credentials <- fromJSON(credentials_file)
 ckey <- credentials$twitter$consumer_key
 csecret <- credentials$twitter$consumer_secret
 atoken <- credentials$twitter$access_token
