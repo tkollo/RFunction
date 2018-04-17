@@ -8,7 +8,7 @@ library(viridis)
 library(geojsonio)
 library(broom)
 library(dplyr)
-library(maproj)
+
 
 
 credentials_file = "credentials.json"
