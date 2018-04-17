@@ -10,8 +10,9 @@ library(broom)
 library(dplyr)
 
 
+credentials_file = "credentials.json"
 
-credentials <- fromJSON("credentials.json")
+credentials <- jsonlite::fromJSON(credentials_file)
 
 key <- credentials$openweathermap$key
 
@@ -77,7 +78,7 @@ rsvg_png(plot_file, plot_file_png)
 
 # Posting to twitter ------------------------------------------------------------------
 
-credentials <- fromJSON(credentials_file)
+credentials <- jsonlite::fromJSON(credentials_file)
 ckey <- credentials$twitter$consumer_key
 csecret <- credentials$twitter$consumer_secret
 atoken <- credentials$twitter$access_token
