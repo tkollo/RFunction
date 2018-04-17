@@ -1,5 +1,1 @@
-options(repos = "https://mran.microsoft.com")
-
-# Installing packages ------------------------------------------------------------------
-
-if (!require('httr')) install.packages('httr')
+install.packages('package_name', dependencies=TRUE, repos='http://cran.rstudio.com/')
