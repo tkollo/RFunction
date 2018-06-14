@@ -1,3 +1,7 @@
+# This is the work of thdeltei (but it has been removed from github since)
+
+https://github.com/thdeltei/azure-function-r
+
 # Running R scripts on Azure Function
 
 In this tutorial we will show how to deploy a R script on Azure Function. To illustrate that we take the example of a bot that posts daily to Twitter the temperature forecast for the next 5 days. See it in action [here](https://twitter.com/thdelteil)
